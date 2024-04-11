@@ -1,0 +1,49 @@
+﻿@model List<BlogApplication.MVC.ViewModels.UserVM>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<!-- Page Heading -->
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="h3 mb-2 text-gray-800">User Management</h1>
+    <a class="text-primary" role="button" asp-action="CreateUser" asp-controller="User">Add User</a>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">All User In System</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0" id="myTable">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>UserName</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td>@user.FirstName</td>
+                            <td>@user.LastName</td>
+                            <td>@user.UserName</td>
+                            <td>@user.Email</td>
+                            <td>@user.Role</td>
+                            <td>
+                                <a asp-action="ResetPassword" asp-controller="Auth" asp-area="Admin" asp-route-userId="@user.Id"
+                                   class="btn btn-secondary">Reset password</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

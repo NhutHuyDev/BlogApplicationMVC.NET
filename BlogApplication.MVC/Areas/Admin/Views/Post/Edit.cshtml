@@ -1,0 +1,104 @@
+﻿@model BlogApplication.MVC.ViewModels.EditPostVM
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Edit Post";
+}
+
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="h3 mb-2 text-gray-800">Edit Post</h1>
+    <a class="text-primary" role="button" asp-action="Post" asp-controller="Dashboard">Back To Post List</a>
+</div>
+
+<div class="mb-4"
+     style="background-color: transparent;">
+    <form class="user" method="post" asp-action="Edit" asp-controller="Post" asp-area="Admin" enctype="multipart/form-data">
+        <div class="row card-body shadow p-4">
+            <div class="col-12 col-lg-8">
+                <div class="form-group">
+                    <label for="Title">Title</label>
+                    <input id="Title" asp-for="Title" type="text" class="form-control">
+                    <span asp-validation-for="Title" class="text-danger small"></span>
+                </div>
+                <div class="form-group">
+                    <label for="ShortDescription">Short Description</label>
+                    <input id="ShortDescription" asp-for="ShortDescription" type="text" class="form-control">
+                    <span asp-validation-for="ShortDescription" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="mb-2">
+                    @if (Model.ThumbnailUrl == null)
+                    {
+                        <img class="img-fluid"
+                             src="~/img/default_thumbnail.png"
+                             style="object-fit:cover; height:100%; width:100%">
+                    }
+                    else
+                    {
+                        <img class="img-fluid"
+                             src="~/thumbnails/@Model.ThumbnailUrl"
+                             onerror="this.onerror=null; this.src='/img/default_thumbnail.png'"
+                             style="object-fit:cover; height:100%; width:100%">
+                    }
+                </div>
+                <div class="form-group">
+                    <label>Thumbnail</label>
+                    <input type="file" asp-for="Thumbnail" class="custom-file" accept="image/*"
+                           onchange="handleFileInputChange(event)">
+                    <span asp-validation-for="Thumbnail" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <h2>Compose</h2>
+                <div class="form-group">
+                    <textarea id="tinymce" asp-for="Content" class="form-control" rows="16"></textarea>
+                    <span asp-validation-for="Content" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <input type="submit" class="btn btn-primary btn-user btn-block" value="Edit Post" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        function handleFileInputChange(event) {
+            const file = event.target.files[0];
+
+            const previewImage = document.getElementById('thumbnail-img');
+
+            if (file) {
+                const objUrl = URL.createObjectURL(file);
+                previewImage.src = objUrl;
+            } else {
+                previewImage.src = "/img/default-thumbnail.jpg";
+            }
+        }
+    </script>
+
+    <!-- Place the first <script> tag in your HTML's <head> -->
+    <script src="https://cdn.tiny.cloud/1/clq7xgbkmf9c2r56io1z972w95coq28q25t8vprp24477hdo/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <!-- Place the following <script> and <textarea> tags your HTML's <body> -->
+    <script>
+        tinymce.init({
+            selector: '#tinymce',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+            toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+            tinycomments_mode: 'embedded',
+            tinycomments_author: 'Author name',
+            mergetags_list: [
+                { value: 'First.Name', title: 'First Name' },
+                { value: 'Email', title: 'Email' },
+            ],
+            ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+        });
+    </script>
+}
+
+
+

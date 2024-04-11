@@ -1,0 +1,123 @@
+﻿@model BlogApplication.MVC.ViewModels.HomeVM
+
+@{
+    ViewData["Title"] = "Huy Nguyen";
+    ViewData["Heading"] = "Welcome!";
+    ViewData["SubHeading"] = "I write about everything :))";
+    ViewData["BgHeading"] = "/blog/assets/img/home-bg.jpg";
+}
+
+<div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+        <div class="col-md-10 col-lg-8 col-xl-7">
+            <!-- Post preview-->
+
+            @foreach (var post in Model.postsVM)
+            {
+                <div class="post-preview">
+                    <a href="#">
+                        <h2 class="post-title">@post.Title</h2>
+                        <h4 class="post-subtitle">@post.ShortDescription</h4> 
+                    </a>
+                    <p class="post-meta mb-0">
+                        Posted by
+                        <a href="#!">@post.AuthorName</a>
+                    </p>
+                    <p class="mt-1 post-meta" style="font-size: 16px!important">
+                        @post.CreatedDate.ToString("dd/MM/yyyy")
+                    </p>
+                </div>
+                <!-- Divider-->
+                <hr class="my-4" />
+            }
+
+            @{
+                var currentPage = Model.currentPage;
+                var totalPage = Model.totalPages;
+            }
+
+            <!-- Pagination-->
+
+            <div class="d-flex justify-content-end gap-3 mb-4" style="font-size: 18px!important; cursor: pointer">
+                    <a>
+                        Previous
+                    </a>
+                @if (totalPage < 10)
+                {
+                    @for (var i = 1; i <= totalPage; i++)
+                    {
+                        <a style='@(i == currentPage ? "font-weight: bold" : "")'
+                           asp-action="Index" asp-controller="Home" asp-route-page="@i">@i</a>
+                    }
+                } 
+                else
+                {
+                    @if (currentPage < 4 | currentPage > totalPage - 4)
+                    {
+                        @for (var i = 1; i <= 4; i++)
+                        {
+                            <div>
+                                <a style='@(i == currentPage ? "font-weight: bold" : "")'>@i</a>
+                            </div>
+                        }
+
+                        <div>...</div>
+
+                        @for (var i = totalPage - 3; i <= totalPage; i++)
+                        {
+                            <div>
+                                <a style='@(i == currentPage ? "font-weight: bold" : "")'>@i</a>
+                            </div>
+                        }
+                    }
+
+                    @if (currentPage == 4)
+                    {
+
+                        <a>1</a>
+                        <a>2</a>
+                        <a>3</a>
+                        <a style="font-weight: bold">4</a>
+                        <a>5</a>
+                        <a>...</a>
+                        <a>@totalPage</a>
+                    }
+
+                    @if (currentPage == totalPage - 4)
+                    {
+
+                        <a>1</a>
+                        <a>...</a>
+                        <a style="font-weight: bold">@(currentPage)</a>
+                        <a>@(currentPage + 1)</a>
+                        <a>@(currentPage + 2)</a>
+                        <a>@(currentPage + 3)</a>
+                        <a>@totalPage</a>
+                    }
+
+                    @if (currentPage > 4 & currentPage < totalPage - 4)
+                    {
+                        <div>1</div>
+                        <div>...</div>
+                        <div>
+                            <a>@(currentPage - 1)</a>
+                        </div>
+                        <div>
+                            <a style="font-weight: bold">@currentPage</a>
+                        </div>
+                        <div>
+                            <a>@(currentPage + 1)</a>
+                        </div>
+                        <div>...</div>
+                        <div>@totalPage</div>
+                    }
+                }
+                <div>
+                    <a>
+                        Next
+                    </a>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
